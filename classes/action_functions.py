@@ -17,13 +17,13 @@ class Action_functions():
             event = window.Read(timeout=25)
             window.Element('_IMAGE_').UpdateAnimation(gif_image.gif.gif,  time_between_frames=50)
 
-# Classe referente ao sinal atual / proximo sinal
+'''Classe referente ao sinal atual / proximo sinal'''
 class Actual_signal():
-    # Lista de sinais é requerida (em dict) * .convert *
+    '''Lista de sinais é requerida (em dict) * .convert *'''
     def __init__(self, sinais):
         self.__sinais = sinais
 
-    # Retorna uma string referente ao próximo sinal.
+    '''Retorna uma string referente ao próximo sinal.'''
     def get_next(self):
         now = datetime.now()
         for signal in self.__sinais:
