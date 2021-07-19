@@ -26,6 +26,17 @@ class Layouts():
         layout = [[sg.Column(layout_column, element_justification='right')]]
         return sg.Window('Login', layout=layout, finalize=True, size=(275,150),margins=(20,15,20,20))
 
+    def window_file():
+        sg.theme('DarkBlack1')
+        layout_column = [
+            [sg.FileBrowse(file_types=(("Text Files", "*.txt"),), key='file', button_text='Escolher o histórico'), sg.Button('Enviar')],
+            [sg.Text('', size=(125,1), font='ANY 8', key='file_historic')],
+            [sg.Text('')],
+            [sg.Button('Escolher', button_color=('white', 'green'), size=(10,2))]
+        ]   
+        layout = [[sg.Column(layout_column, element_justification='right')]]
+        return sg.Window('File', layout=layout, finalize=True, size=(300,150),margins=(20,15,20,20))
+
     def window_loading():
         sg.theme('DarkBlack1')
         layout = [  

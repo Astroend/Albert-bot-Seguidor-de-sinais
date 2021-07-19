@@ -14,8 +14,13 @@ class Main():
 
         operate = False
         api = Api()
-        window_astroend, window_login, pop_up, window_option, window_trading, window_terminate = Layouts.window_astroend(), None, None, None, None, None
+        window_astroend, window_file, window_login, pop_up, window_option, window_trading, window_terminate = Layouts.window_astroend(), None, None, None, None, None, None
         
+        status, message = Where_save().find()
+
+        if status:
+            file_historic = message
+
         while True:
  
             window, event, values = sg.read_all_windows(timeout=25)
@@ -29,12 +34,33 @@ class Main():
                     
             if window == window_astroend and event == 'ACEITO OS TERMOS':
                 window_astroend.close()
+
+                if status:
+                    window_login = Layouts.window_login()
+                else:
+                    window_file = Layouts.window_file()
+
+            if window == window_file and event == sg.WIN_CLOSED:
+                break
+
+            if window == window_file and event == 'Enviar':
+                window_file['file_historic'].update(values['file'])
+
+            if window == window_file and event == 'Escolher':
+                Where_save().create(values['file'])
+
+                status, message = Where_save().find()
+                if status:
+                    file_historic = message
+                
+                window_file.close()
                 window_login = Layouts.window_login()
             
             if window == window_login and event == sg.WIN_CLOSED:
                 break
  
             if window == window_login and event == 'Entrar':
+                
                 window_login.close()   
  
                 loading = Process(target  = Action_functions.gif)
