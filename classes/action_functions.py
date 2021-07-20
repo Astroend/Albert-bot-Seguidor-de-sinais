@@ -94,3 +94,23 @@ class Write_txt():
             self.file_path = f'''{self.file_path}/{self.month}'''
             return (True, 'Diretório criado')
 
+    '''Escreve / cria arquivo txt no diretório especificado.'''
+    def write(string):
+        if os.path.exists(f'''{self.file_path}/{datetime.now().strftime('%d-%m-%Y')}.txt'''):
+            '''Se arquivo txt existe.'''
+            with open(f'''{self.file_path}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'r') as file:
+                '''Abre o arquivo em modo de leitura.'''
+                if (file.read()[len(file.read())-2:]) == '\n':
+                    '''Verifica se o último valor é uma quebra de linha.'''
+                    with open(f'''{self.file_path}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'a') as text:
+                        '''Abre novamente o arquivo mas em modo de adicionar texto.'''
+                        text.write(string) # Escreve no arquivo txt.        
+                else:
+                    '''Se não for, ele inicia a linha com uma quebra de linha.'''
+                    with open(f'''{self.file_path}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'a') as text:
+                        text.write('\n' + string) # Escreve no arquivo txt.          
+        else:
+            '''Se não existe, arquivo txt é criado.'''
+            with open(f'''{self.file_path}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'a') as file:
+                '''Abre o arquivo em modo de adicionar text'''
+                file.write(string) # Escreve no arquivo txt.
