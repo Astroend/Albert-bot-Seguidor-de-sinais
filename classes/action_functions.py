@@ -71,3 +71,11 @@ class Where_save():
             except: 
                 '''Retorna False e uma mensagem caso não seja bem sucedido.'''
                 return (False, "Erro em criar o diretório")
+
+class Write_txt():
+    '''Escreve os valores no arquivo TXT'''
+  
+    '''Declara as variáveis month_names e month para uso posterior'''
+    def __init__(self):
+        self.month_names = [None, 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+        self.month = self.month_names[int(datetime.now().strftime('%m'))]
