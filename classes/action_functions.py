@@ -76,18 +76,20 @@ class Write_txt():
     '''Escreve os valores no arquivo TXT'''
   
     '''Declara as variáveis month_names e month para uso posterior'''
-    def __init__(self):
+    def __init__(self, string):
         self.month_names = [None, 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
         self.month = self.month_names[int(datetime.now().strftime('%m'))]
         self.today = datetime.now()
 
+        self.file_path = string
+
     '''Verifica a existência do diretório / cria o diretório'''
-    def directory(self, string):
-        if os.path.exists(f'''{string}/{self.month}'''):
+    def directory(self):
+        if os.path.exists(f'''{self.file_path}/{self.month}'''):
             '''Se o diretório já existir.'''
             return (True, 'Diretório já existente')
         else: 
             '''Se o diretório não existir ele cria o diretório'''
-            os.makedirs(f'''{string}/{month}''')
+            os.makedirs(f'''{self.file_path}/{month}''')
             return (True, 'Diretório criado')
         
