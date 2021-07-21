@@ -3,9 +3,11 @@
 from iqoptionapi.stable_api import IQ_Option
 from datetime import datetime
 
+from classes.action_functions import Write_txt
+
 
 class Process():
-    def __init__(self, email, password , account_type,value, martingale, sinais, option, stop_win, stop_loss, multiplicador):
+    def __init__(self, email, password , account_type,value, martingale, sinais, option, stop_win, stop_loss, multiplicador, file):
         self.__email = email # E-mail de acesso da IqOption.
         self.__password = password # Senha de acesso da IqOption.
         self.__value = value # Valor das operações.
@@ -19,6 +21,8 @@ class Process():
         self.connect()
         self.__banca = self.API.get_balance()
         self.operate()
+        self.txt = Write_txt(file)
+        self.txt.directory()
 
     # Realiza a conexão do websocket à Iq Option.
     def connect(self):
@@ -64,9 +68,14 @@ class Process():
                 print(f"Oops, tive um problema em abrir a ordem {active} as {time}")
                 return 0
             result = self.API.check_win_v3(id)
-            if result < 0: value*= self.__multiplicador
+            if result < 0: 
+                if trie == self.__martingale-1:
+                    self.txt.write(f'''R$ {result} - {active} - {time} - {action}''')
+                value*= self.__multiplicador
             print(f"Resultado da ordem {result}")
-            if result > 0: return result
+            if result > 0: 
+                self.txt.write(f'''R$ +{result} - {active} - {time} - {action}''')
+                return result
 
     # Abre as ordens em opções digital.
     def buy_digital(self, active, action, duration, time):
@@ -83,8 +92,12 @@ class Process():
                 if win<0:
                     print(f"Resultado da ordem -R${win}")
                     value *= self.__multiplicador
+                    if trie == self.__martingale-1:
+                        self.txt.write(f'''R$ -{win} - {active} - {time} - {action}''')
                 if win > 0:
                     print(f"Resultado da ordem +R${win}")
+
+                    self.txt.write(f'''R$ +{win} - {active} - {time} - {action}''')
                     return win
             else:
                 print(f"Oops, tive um problema em abrir a ordem {active} as {time}")
