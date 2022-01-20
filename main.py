@@ -1,8 +1,8 @@
 from PySimpleGUI import PySimpleGUI as sg
 from multiprocessing import Process, Manager, freeze_support
+from threading import Thread
 
 from classes.action_functions import Action_functions, Actual_signal, Where_save
-from classes.process import Process as Operate
 from classes.layouts import Layouts
 from classes.readTXT import Read
 from classes.api_main import Api
@@ -68,6 +68,7 @@ class Main():
                 loading.start()
 
                 if(api.connect(values['login'], values['password'])):
+                    api.update_balance()
                     loading.terminate()
                     window_option = Layouts.window_option()
                 else:
@@ -81,6 +82,7 @@ class Main():
             if window == window_option and event == 'Enviar':
                 window_option['listbox'].update(Read(values['file']).to_list())
                 file = Read(values['file']).convert()
+                api.sinais(file)
 
             if window == window_option and event == 'Operar':
 
@@ -95,9 +97,7 @@ class Main():
                 api.multiplicador(
                     float((str(values['multiplier'])).replace(',', '.')))
 
-                trading_ = Process(target=Operate, args=(api.get_email, api.get_password,
-                                                         api.get_type, api.get_value, api.get_martingale, file,
-                                                         api.get_option, api.get_stop_win, api.get_stop_loss, api.get_multiplicador))
+                trading_ = Thread(target=api.operate)
 
                 trading_.start()
 
@@ -107,7 +107,7 @@ class Main():
                     api.get_type, api.get_balance, api.get_martingale, api.get_stop_win_complete, api.get_stop_loss_complete)
 
             if window == window_trading and event == sg.WIN_CLOSED:
-                trading_.terminate()
+                api.set_status()
                 operate = False
                 break
 
@@ -119,7 +119,7 @@ class Main():
                     f"{Actual_signal(file).get_next()}")
 
             if window == window_trading and event == 'Finalizar':
-                trading_.terminate()
+                api.set_status()
                 operate = False
 
                 window_trading.close()
