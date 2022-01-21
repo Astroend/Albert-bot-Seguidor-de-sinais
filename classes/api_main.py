@@ -162,7 +162,6 @@ class Api():
     # Aguarda o momento correto para realizar a entrada.
     def its_time(self, hour):
         now = datetime.now()
-        #print(hour)
         date = datetime(int(now.strftime("%Y")), int(now.strftime("%m")), int(now.strftime("%d")), int(hour[0]), int(hour[1]), 00)
         print("Aguardando o horário de compra")
         while True:
@@ -170,9 +169,9 @@ class Api():
             #print(date ,datetime.timestamp(date), self.API.get_server_timestamp())
             timestamp_ = self.API.get_server_timestamp() 
 
-            if (datetime.timestamp(date)-2) <= timestamp_ and datetime.timestamp(date) <= (timestamp_+5):
+            if (datetime.timestamp(date)-2) >= timestamp_ and datetime.timestamp(date) <= (timestamp_+5):
                 return True
-            if (datetime.timestamp(date)+10) < self.API.get_server_timestamp():
+            if (datetime.timestamp(date)+10) < timestamp_:
                 print("Horário de compra passou.")
                 return False
 
@@ -203,12 +202,12 @@ class Api():
                 return 0
             result = self.API.check_win_v3(id)
             if result < 0: 
-                if trie == self.martingale-1:
-                    self.txt.write(f'''R$ {result} - {active} - {time} - {action}''')
+                #if trie == self.martingale-1:
+                    # self.txt.write(f'''R$ {result} - {active} - {time} - {action}''')
                 value*= self.multiplicador
             print(f"Resultado da ordem {result}")
             if result > 0: 
-                self.txt.write(f'''R$ +{result} - {active} - {time} - {action}''')
+                # self.txt.write(f'''R$ +{result} - {active} - {time} - {action}''')
                 return result
 
     # Abre as ordens em opções digital.
@@ -226,12 +225,12 @@ class Api():
                 if win<0:
                     print(f"Resultado da ordem -R${win}")
                     value *= self.multiplicador
-                    if trie == self.martingale-1:
-                        self.txt.write(f'''R$ -{win} - {active} - {time} - {action}''')
+                    #if trie == self.martingale-1:
+                        # self.txt.write(f'''R$ -{win} - {active} - {time} - {action}''')
                 if win > 0:
                     print(f"Resultado da ordem +R${win}")
 
-                    self.txt.write(f'''R$ +{win} - {active} - {time} - {action}''')
+                    # self.txt.write(f'''R$ +{win} - {active} - {time} - {action}''')
                     return win
             else:
                 print(f"Oops, tive um problema em abrir a ordem {active} as {time}")
