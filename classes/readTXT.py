@@ -19,8 +19,7 @@ class Read():
         return self.sinal_list
 
     def convert_time(self, time):
-        multiplier = time[0:1]
-        if multiplier.upper() == "H":
+        if time[0] == "H":
             return int(time[1:]*60)
         else: 
             return int(time[1:])
@@ -33,7 +32,10 @@ class Read():
             element = element.split("-")
             for item in element:
                 if len(item) == 6:
-                    element_dict["Active"] = item
+                    if "OTC" in element:
+                        element_dict["Active"] = item + "-OTC"
+                    else:
+                        element_dict["Active"] = item
                 if item.find(":") >= 0:
                     element_dict["Hour"] = item.split(":")
                 if item.upper() == "CALL" or item.upper() == "PUT":

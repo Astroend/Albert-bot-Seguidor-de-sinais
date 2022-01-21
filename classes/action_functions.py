@@ -27,19 +27,19 @@ class Actual_signal():
     def get_next(self):
         now = datetime.now()
         for signal in self.__sinais:
-            try:
-                if signal["Duration"].count("M") or signal["Duration"].count("H"):
-                    signal["Duration"] = self.convert_time(signal["Duration"])
-                else: pass
-            except: pass
+            # try:
+            #     if signal["Duration"].count("M") or signal["Duration"].count("H"):
+            #         signal["Duration"] = self.convert_time(signal["Duration"])
+            #     else: pass
+            # except: pass
             try: signal_hour = (datetime(int(now.strftime("%Y")), int(signal["Date"][1]), int(signal["Date"][0]), int(signal["Hour"][0]), int(signal["Hour"][1]))).timestamp()
             except: signal_hour = (datetime(int(now.strftime("%Y")), int(now.strftime("%m")), int(now.strftime("%d")), int(signal["Hour"][0]), int(signal["Hour"][1]))).timestamp()
             if now.timestamp() >= signal_hour: continue
             else:
                 if signal["Duration"] < 60:
-                    signal["Duration"] = f"M{signal['Duration']}"
-                else: signal["Duration"] = f"H{(signal['Duration'])/60}"
-                return f'''{signal["Duration"]}-{signal["Active"]}-{signal["Hour"][0]}:{signal["Hour"][1]}-{signal["Action"]}'''
+                    duration = f"M{signal['Duration']}"
+                else: duration = f"H{(signal['Duration'])/60}"
+                return f'''{duration}-{signal["Active"]}-{signal["Hour"][0]}:{signal["Hour"][1]}-{signal["Action"]}'''
 
     def convert_time(self, time):
         multiplier = time[0:1]
