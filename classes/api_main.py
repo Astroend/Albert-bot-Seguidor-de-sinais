@@ -169,7 +169,7 @@ class Api():
             #print(date ,datetime.timestamp(date), self.API.get_server_timestamp())
             timestamp_ = self.API.get_server_timestamp() 
 
-            if (datetime.timestamp(date)-2) >= timestamp_ and datetime.timestamp(date) <= (timestamp_+5):
+            if (datetime.timestamp(date)-2) <= timestamp_ and datetime.timestamp(date)+1 >= timestamp:
                 return True
             if (datetime.timestamp(date)+10) < timestamp_:
                 print("Horário de compra passou.")
