@@ -193,7 +193,7 @@ class Api():
     # Abre as ordens em opções binárias.
     def buy_binary(self, active, action, duration, time):
         value = self.value
-        for trie in range(self.martingale):
+        for trie in range(self.martingale + 1):
             check,id=self.API.buy(value, active, action, duration)
             if check:
                 if value > self.__value: print(f"{trie}ª Martingale")
@@ -214,7 +214,7 @@ class Api():
     # Abre as ordens em opções digital.
     def buy_digital(self, active, action, duration, time):
         value = self.value
-        for trie in range(self.martingale):
+        for trie in range(self.martingale +1):
             _, id = self.API.buy_digital_spot(active, value, action.lower(), duration)
             if id !="error":
                 if value > self.value : print(f"{trie}ª Martingale")
