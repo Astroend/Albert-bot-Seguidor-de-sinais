@@ -168,7 +168,9 @@ class Api():
         while True:
             if not self.stop(): break
             #print(date ,datetime.timestamp(date), self.API.get_server_timestamp())
-            if (datetime.timestamp(date)-2) >= self.API.get_server_timestamp() and datetime.timestamp(date) <= (self.API.get_server_timestamp()+5):
+            timestamp_ = self.API.get_server_timestamp() 
+
+            if (datetime.timestamp(date)-2) <= timestamp_ and datetime.timestamp(date) <= (timestamp_+5):
                 return True
             if (datetime.timestamp(date)+10) < self.API.get_server_timestamp():
                 print("Horário de compra passou.")
@@ -238,7 +240,6 @@ class Api():
     def operate(self):
         self.status = False
         for item in self.sinais:
-            print(item)
             if self.stop():
                 entrar = self.its_time(item['Hour'])
                 if entrar == True:
