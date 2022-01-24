@@ -90,12 +90,12 @@ class Write_txt():
             return (True, 'Diretório já existente')
         else: 
             '''Se o diretório não existir ele cria o diretório'''
-            os.makedirs(f'''{self.file_path}/{month}''')
+            os.makedirs(f'''{self.file_path}/{self.month}''')
             self.file_path = f'''{self.file_path}/{self.month}'''
             return (True, 'Diretório criado')
 
     '''Escreve / cria arquivo txt no diretório especificado.'''
-    def write(string):
+    def write(self, string):
         if os.path.exists(f'''{self.file_path}/{datetime.now().strftime('%d-%m-%Y')}.txt'''):
             '''Se arquivo txt existe.'''
             with open(f'''{self.file_path}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'r') as file:

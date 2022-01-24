@@ -96,6 +96,7 @@ class Main():
                 api.martingale(int(values['martingale']))
                 api.multiplicador(
                     float((str(values['multiplier'])).replace(',', '.')))
+                api.file(file)
 
                 trading_ = Thread(target=api.operate)
 

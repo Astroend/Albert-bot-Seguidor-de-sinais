@@ -1,7 +1,7 @@
 # Classe de acesso direto ás informações de usuário.
 from iqoptionapi.stable_api import IQ_Option
 
-from classes.readTXT import Read
+from classes.readTXT import Read, Write_txt
 
 from datetime import datetime
 
@@ -115,6 +115,10 @@ class Api():
     @property
     def get_password(self):
         return self.password
+
+    def file(self, file):
+        self.txt = Write_txt(file)
+        self.txt.directory()
 
     def connect(self, email, senha):
         self.__email(email)
