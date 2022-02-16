@@ -54,7 +54,7 @@ class Main():
                     window_file = Layouts.window_file()
 
             if window == window_file and event == sg.WIN_CLOSED:
-                print("\n****EXIT****\n")
+                logging.info("\n****EXIT****\n")
                 break
 
             if window == window_file and event == 'Enviar':
