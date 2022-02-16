@@ -93,7 +93,7 @@ class Main():
                     window_option = Layouts.window_option()
                 else:
                     loading.terminate()
-                    print(" -- ERRO AO CONECTAR\n")
+                    logging.info(" -- ERRO AO CONECTAR\n")
                     pop_up = Layouts.pop_up()
                     window_login = Layouts.window_login()
 
