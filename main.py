@@ -58,7 +58,7 @@ class Main():
                 break
 
             if window == window_file and event == 'Enviar':
-                print(" -- CAMINHO ENVIADO: '" +values['file']+ "'\n")
+                logging.info(" -- CAMINHO ENVIADO: '" +values['file']+ "'\n")
                 window_file['file_historic'].update(values['file'])
 
             if window == window_file and event == 'Escolher':
