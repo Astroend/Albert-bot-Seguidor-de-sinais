@@ -27,7 +27,7 @@ class Main():
             file_historic = message
             print(" -- CAMINHO SALVO: '" +file_historic+"'\n")
         else:
-            print(" -- CAMINHO NÃO ENCONTRADO\n")
+            logging.info(" -- CAMINHO NÃO ENCONTRADO\n")
 
         while True:
 
