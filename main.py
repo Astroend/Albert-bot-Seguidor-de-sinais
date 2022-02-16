@@ -7,6 +7,8 @@ from classes.layouts import Layouts
 from classes.readTXT import Read
 from classes.api_main import Api
 
+import logging
+
 import os
 
 class Main():

@@ -173,13 +173,13 @@ class Api():
             #print(date ,datetime.timestamp(date), self.API.get_server_timestamp())
             timestamp_ = self.API.get_server_timestamp()
 
-            print(f"  ## [{datetime.now().strftime('%H:%M:%S')}] :: Aguardando... ("+str(date)+")", end='\r')
+            logging.info(f"  ## [{datetime.now().strftime('%H:%M:%S')}] :: Aguardando... ("+str(date)+")", end='\r')
 
             if (datetime.timestamp(date)-2) <= timestamp_ and datetime.timestamp(date)+1 >= timestamp_:
-                print(f"\r  ## [{datetime.now().strftime('%H:%M:%S')}] :: Comprando...                          ")
+                logging.info(f"\r  ## [{datetime.now().strftime('%H:%M:%S')}] :: Comprando...                          ")
                 return True
             if (datetime.timestamp(date)+10) < timestamp_:
-                print(f"  ## [{datetime.now().strftime('%H:%M:%S')}] :: Aguardando... ("+str(date)+")", end='\r')
+                logging.info(f"  ## [{datetime.now().strftime('%H:%M:%S')}] :: Aguardando... ("+str(date)+")", end='\r')
                 return False
 
     # Parâmetros de parada do automatizador.
@@ -187,12 +187,12 @@ class Api():
         if self.status == True:
             return False
         if self.API.get_balance() >= (self.banca + self.stop_win):
-            print("  ## Stop win batido.\n")
+            logging.info("  ## Stop win batido.\n")
             txt = (f'''   ##### STOP WIN #####''')
             Write_txt().write(txt)
             return False
         if self.API.get_balance() <= (self.banca - self.stop_loss):
-            print(" ## Stop loss batido.\n")
+            logging.info(" ## Stop loss batido.\n")
             txt = (f'''   ##### STOP LOSS #####''')
             Write_txt().write(txt)
             return False
@@ -205,34 +205,23 @@ class Api():
             check,id=self.API.buy(value, active, action, duration)
             if check:
                 if trie != 0: print(f"  ## {trie}ª Martingale")
-                print(f"  ## Ordem de {action} em {active} de {value} aberta.")
+                logging.info(f"  ## Ordem de {action} em {active} de {value} aberta.")
             else:
-                print(f"  ## Oops, tive um problema em abrir a ordem {active} as {time}\n")
+                logging.info(f"  ## Oops, tive um problema em abrir a ordem {active} as {time}\n")
                 txt = (f''' ## Problemas em {active} as {time}''')
                 Write_txt().write(txt)
                 return 0
             result = self.API.check_win_v3(id)
-            if result < 0: 
-                value*= self.multiplicador
-                saldo = float(result)
-                saldoo = ('{:.2f}'.format(saldo))
-                if (trie == 0):
-                    txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldoo}''')
-                else:
-                    txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldoo} / Martingale {trie}''')
-                Write_txt().write(txt)
-            print(f"  ## Resultado da ordem {result}")
-            print("  ## Operação Salva \n")
-            if result > 0: 
-                #txt = (f'''R$ +{result} - {active} - {time} - {action}''')
-                saldo = float(result)
-                saldoo = ('{:.2f}'.format(saldo))
-                if (trie == 0):
-                    txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldoo}''')
-                else:
-                    txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldoo} / Martingale {trie}''')
-                Write_txt().write(txt)
-                return result
+    
+            value*= self.multiplicador
+            saldo = round(float(result),2)
+            if (trie == 0):
+                txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldo}''')
+            else:
+                txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldo} / Martingale {trie}''')
+            Write_txt().write(txt)
+            logging.info(f"  ## Resultado da ordem {result}")
+            logging.info("  ## Operação Salva \n")
 
     # Abre as ordens em opções digital.
     def buy_digital(self, active, action, duration, time):
@@ -241,51 +230,29 @@ class Api():
             _, id = self.API.buy_digital_spot(active, value, action.lower(), duration)
             if id !="error":
                 if (trie != 0) : print(f"  ## {trie}ª Martingale")
-                print(f"  ## Ordem de {action} em {active} de {value} aberta.")
+                logging.info(f"  ## Ordem de {action} em {active} de {value} aberta.")
                 while True:
                     check,win=self.API.check_win_digital_v2(id)
                     if check==True:
                         break
-                if win<0:
-                    print(f"  ## Resultado da ordem -R${win}")
-                    value *= self.multiplicador
-                    if trie == self.martingale:
-                        #txt = (f'''R$ -{win} - {active} - {time} - {action}''')
-                        saldo = float(win)  
-                        saldoo = ('{:.2f}'.format(saldo))
-                        if (trie == 0):
-                            txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldoo}''')
-                        else:
-                            txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldoo} / Martingale {trie}''')
-                        Write_txt().write(txt)
-                        print("  ## Operação Salva \n")
-                    else:
-                        saldo = float(win)  
-                        saldoo = ('{:.2f}'.format(saldo))
-                        if (trie == 0):
-                            txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldoo}''')
-                        else:
-                            txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldoo} / Martingale {trie}''')
-                        Write_txt().write(txt)
-                        print("  ## Operação Salva \n")
-                if win > 0:
-                    print(f"  ## Resultado da ordem +R${win}")
-
-                    #txt = (f'''R$ +{win} - {active} - {time} - {action}''')
-                    saldo = float(win)
-                    saldoo = ('{:.2f}'.format(saldo))
+  
+                logging.info(f"  ## Resultado da ordem -R${win}")
+                value *= self.multiplicador
+                if trie == self.martingale:
+                    #txt = (f'''R$ -{win} - {active} - {time} - {action}''')
+                    saldo = round(float(win),2)
                     if (trie == 0):
-                            txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldoo}''')
+                        txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldo}''')
                     else:
-                        txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldoo} / Martingale {trie}''')
+                        txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldo} / Martingale {trie}''')
                     Write_txt().write(txt)
-                    print("  ## Operação Salva \n")
-                    return win
+                    logging.info("  ## Operação Salva \n")
+                 
             else:
-                logger.info(f"  ## Oops, tive um problema em abrir a ordem {active} as {time}\n")
+                logging.info(f"  ## Oops, tive um problema em abrir a ordem {active} as {time}\n")
                 txt = (f''' ## Problemas em {active} as {time}''')
                 Write_txt().write(txt)
-                print("  ## Operação Salva \n")
+                logging.info("  ## Operação Salva \n")
 
     # Inicia as operações.
     def operate(self):

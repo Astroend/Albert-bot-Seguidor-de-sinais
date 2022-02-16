@@ -89,13 +89,13 @@ class Write_txt():
         if os.path.exists(f'''{self.file_path}/{self.month}'''):
             '''Se o diretório já existir.'''
             self.file_path = f'''{self.file_path}/{self.month}'''
-            print(self.file_path)
+        
             return (True, 'Diretório já existente')
         else: 
             '''Se o diretório não existir ele cria o diretório'''
             os.makedirs(f'''{self.file_path}/{self.month}''')
             self.file_path = f'''{self.file_path}/{self.month}'''
-            print(self.file_path)
+            
 
             return (True, 'Diretório criado')
 
@@ -121,9 +121,4 @@ class Write_txt():
             with open(f'''{files}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'a') as file:
                 '''Abre o arquivo em modo de adicionar text'''
                 file.write(txt) # Escreve no arquivo txt.
-
-if __name__ == '__main__':
-    save = Where_save().find()
-    print(save)
-    salve = Write_txt().write("boa noite")
     
