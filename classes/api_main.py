@@ -278,7 +278,7 @@ class Api():
                     print("  ## Operação Salva \n")
                     return win
             else:
-                print(f"  ## Oops, tive um problema em abrir a ordem {active} as {time}\n")
+                logger.info(f"  ## Oops, tive um problema em abrir a ordem {active} as {time}\n")
                 txt = (f''' ## Problemas em {active} as {time}''')
                 Write_txt().write(txt)
                 print("  ## Operação Salva \n")
