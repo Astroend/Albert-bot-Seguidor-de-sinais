@@ -119,6 +119,7 @@ class Main():
                 api.martingale(int(values['martingale']))
                 api.multiplicador(
                     float((str(values['multiplier'])).replace(',', '.')))
+                api.file(file)
 
                 logging.info(" -- COMEÇANDO: {'"+str(api.get_type)+"', '"+str(api.get_balance)+"', '"+str(api.get_martingale)+"', '"
                     +str(api.get_stop_win_complete)+"', '"+str(api.get_stop_loss_complete)+"', '"

@@ -103,6 +103,7 @@ class Write_txt():
     def write(self, txt):
         files = self.file_path[1]
         if os.path.exists(f'''{files}/{datetime.now().strftime('%d-%m-%Y')}.txt'''):
+
             '''Se arquivo txt existe.'''
             with open(f'''{files}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'r') as file:
                 '''Abre o arquivo em modo de leitura.'''

@@ -117,6 +117,10 @@ class Api():
     def get_password(self):
         return self.password
 
+    def file(self, file):
+        self.txt = Write_txt(file)
+        self.txt.directory()
+
     def connect(self, email, senha):
         self.__email(email)
         self.__password(senha)
