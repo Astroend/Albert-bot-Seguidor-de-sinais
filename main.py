@@ -153,7 +153,7 @@ class Main():
                 window_terminate = Layouts.window_finalize(api.get_balance, file_historic)
 
             if window == window_terminate and event == sg.WIN_CLOSED:
-                print("\n****EXIT****\n")
+                logging.info("\n****EXIT****\n")
                 break
 
             if window == window_terminate and event == 'Fechar':
