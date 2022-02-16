@@ -34,7 +34,7 @@ class Main():
             window, event, values = sg.read_all_windows(timeout=25)
 
             if window == window_astroend and event == sg.WIN_CLOSED:
-                print("\n****EXIT****\n")
+                logging.info("\n****EXIT****\n")
                 break
 
             if window == window_astroend and event == 'TERMOS':
