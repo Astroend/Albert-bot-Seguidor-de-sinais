@@ -299,6 +299,6 @@ class Api():
                         self.buy_digital(item["Active"], item["Action"], item["Duration"], item["Hour"])
                 else: continue
 
-        print("\n\n  ## ...FINALIZADO\n")
+        logging.info("\n\n  ## ...FINALIZADO\n")
         txt = (f''' --- FIM --- ''')
         Write_txt().write(txt)
