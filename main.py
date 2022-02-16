@@ -13,8 +13,8 @@ import os
 class Main():
 
     def __init__(self):
-        print("\n" * os.get_terminal_size().lines)
-        print("****START****\n\n")
+        logging.info("\n" * os.get_terminal_size().lines)
+        logging.info("****START****\n\n")
         operate = False
         api = Api()
         window_astroend, window_file, window_login, pop_up, window_option, window_trading, window_terminate = Layouts.window_astroend(
