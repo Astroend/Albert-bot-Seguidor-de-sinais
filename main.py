@@ -104,7 +104,7 @@ class Main():
             if window == window_option and event == 'Enviar':
                 window_option['listbox'].update(Read(values['file']).to_list())
                 file = Read(values['file']).convert()
-                print(" -- SINAIS ENVIADOS\n")
+                logging.info(" -- SINAIS ENVIADOS\n")
                 api.sinais(file)
 
             if window == window_option and event == 'Operar':
