@@ -66,7 +66,7 @@ class Main():
 
                 status, message = Where_save().find()
                 if status:
-                    print(" -- CAMINHO SALVO\n")
+                    logging.info(" -- CAMINHO SALVO\n")
                     file_historic = message
 
                 window_file.close()
