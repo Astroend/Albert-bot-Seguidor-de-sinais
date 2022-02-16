@@ -70,7 +70,7 @@ class Main():
                     file_historic = message
 
                 window_file.close()
-                print(" -- WINDOW LOGIN\n")
+                logging.info(" -- WINDOW LOGIN\n")
                 window_login = Layouts.window_login()
 
             if window == window_login and event == sg.WIN_CLOSED:
