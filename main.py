@@ -43,7 +43,7 @@ class Main():
                 logging.info(" -- TERMOS \n")
 
             if window == window_astroend and event == 'ACEITO OS TERMOS':
-                print(" -- TERMOS ACEITOS\n")
+                logging.info(" -- TERMOS ACEITOS\n")
                 window_astroend.close()
 
                 if status:
