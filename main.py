@@ -47,7 +47,7 @@ class Main():
                 window_astroend.close()
 
                 if status:
-                    print(" -- WINDOW LOGIN\n")
+                    logging.info(" -- WINDOW LOGIN\n")
                     window_login = Layouts.window_login()
                 else:
                     print(" -- WINDOW FILE\n")
