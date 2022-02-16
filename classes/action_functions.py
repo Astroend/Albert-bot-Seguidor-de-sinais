@@ -101,8 +101,7 @@ class Write_txt():
 
     '''Escreve / cria arquivo txt no diretório especificado.'''
     def write(self, txt):
-        filess = self.file_path
-        files = filess[1]
+        files = self.file_path[1]
         if os.path.exists(f'''{files}/{datetime.now().strftime('%d-%m-%Y')}.txt'''):
             '''Se arquivo txt existe.'''
             with open(f'''{files}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'r') as file:
