@@ -74,7 +74,7 @@ class Main():
                 window_login = Layouts.window_login()
 
             if window == window_login and event == sg.WIN_CLOSED:
-                print("\n****EXIT****\n")
+                logging.info("\n****EXIT****\n")
                 break
 
             if window == window_login and event == 'Entrar':
