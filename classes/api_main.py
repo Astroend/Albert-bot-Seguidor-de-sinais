@@ -286,7 +286,7 @@ class Api():
     # Inicia as operações.
     def operate(self):
         self.status = False
-        print("  ## TRABALHANDO...\n")
+        logging.info("  ## TRABALHANDO...\n")
         txt = (f''' --- COMECO --- ''')
         Write_txt().write(txt)
         for item in self.sinais:
