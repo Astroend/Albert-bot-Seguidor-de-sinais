@@ -29,7 +29,7 @@ class Layouts():
     def window_file():
         sg.theme('DarkBlack1')
         layout_column = [
-            [sg.FileBrowse(file_types=(("Text Files", "*.txt"),), key='file', button_text='Escolher o histórico'), sg.Button('Enviar')],
+            [sg.FolderBrowse(key='file', button_text='Escolher o histórico'), sg.Button('Enviar')],
             [sg.Text('', size=(125,1), font='ANY 8', key='file_historic')],
             [sg.Text('')],
             [sg.Button('Escolher', button_color=('white', 'green'), size=(10,2))]
@@ -89,13 +89,13 @@ class Layouts():
         layout = [[sg.Column(layout_column, element_justification='center')]]
         return sg.Window('Trading', layout=layout, finalize=True, size=(350,410),margins=(20,15,20,20))
 
-    def window_finalize(balance):
+    def window_finalize(balance, file):
         sg.theme('DarkBlack1')
         layout_column = [  
             [sg.Text(('Banca Final: ' + str(balance)), font='ANY 15', text_color='#64929E')],
             [sg.Text(('O relatorio final esta salvo na pasta:'), font='ANY 15')],
-            [sg.Text(('/%appdata%/.astroend/registers'), font='ANY 15')],
+            [sg.StatusBar(text=(str(file)), font='ANY 8')],
             [sg.Button('Fechar', button_color=('white', 'green'))]
         ]
         layout = [[sg.Column(layout_column, element_justification='center')]]
-        return sg.Window('Trading', layout=layout, finalize=True, size=(375,175),margins=(20,15,20,20))
+        return sg.Window('Trading', layout=layout, finalize=True, size=(400,175),margins=(20,15,20,20))

@@ -1,7 +1,9 @@
+
 from classes.layouts import Layouts
 import gif_image.gif
 
 from datetime import datetime
+from gettext import find
 import os
 
 
@@ -76,41 +78,51 @@ class Write_txt():
     '''Escreve os valores no arquivo TXT'''
   
     '''Declara as variáveis month_names e month para uso posterior'''
-    def __init__(self, string):
+    def __init__(self):
         self.month_names = [None, 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
         self.month = self.month_names[int(datetime.now().strftime('%m'))]
         self.today = datetime.now()
-        self.file_path = string
+        self.file_path = Where_save().find()
 
     '''Verifica a existência do diretório / cria o diretório'''
     def directory(self):
         if os.path.exists(f'''{self.file_path}/{self.month}'''):
             '''Se o diretório já existir.'''
             self.file_path = f'''{self.file_path}/{self.month}'''
+            print(self.file_path)
             return (True, 'Diretório já existente')
         else: 
             '''Se o diretório não existir ele cria o diretório'''
-            os.makedirs(f'''{self.file_path}/{month}''')
+            os.makedirs(f'''{self.file_path}/{self.month}''')
             self.file_path = f'''{self.file_path}/{self.month}'''
+            print(self.file_path)
+
             return (True, 'Diretório criado')
 
     '''Escreve / cria arquivo txt no diretório especificado.'''
-    def write(string):
-        if os.path.exists(f'''{self.file_path}/{datetime.now().strftime('%d-%m-%Y')}.txt'''):
+    def write(self, txt):
+        filess = self.file_path
+        files = filess[1]
+        if os.path.exists(f'''{files}/{datetime.now().strftime('%d-%m-%Y')}.txt'''):
             '''Se arquivo txt existe.'''
-            with open(f'''{self.file_path}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'r') as file:
+            with open(f'''{files}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'r') as file:
                 '''Abre o arquivo em modo de leitura.'''
                 if (file.read()[len(file.read())-2:]) == '\n':
                     '''Verifica se o último valor é uma quebra de linha.'''
-                    with open(f'''{self.file_path}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'a') as text:
+                    with open(f'''{files}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'a') as text:
                         '''Abre novamente o arquivo mas em modo de adicionar texto.'''
-                        text.write(string) # Escreve no arquivo txt.        
+                        text.write(txt) # Escreve no arquivo txt.        
                 else:
                     '''Se não for, ele inicia a linha com uma quebra de linha.'''
-                    with open(f'''{self.file_path}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'a') as text:
-                        text.write('\n' + string) # Escreve no arquivo txt.          
+                    with open(f'''{files}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'a') as text:
+                        text.write('\n' + txt) # Escreve no arquivo txt.          
         else:
             '''Se não existe, arquivo txt é criado.'''
-            with open(f'''{self.file_path}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'a') as file:
+            with open(f'''{files}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'a') as file:
                 '''Abre o arquivo em modo de adicionar text'''
-                file.write(string) # Escreve no arquivo txt.
+                file.write(txt) # Escreve no arquivo txt.
+
+if __name__ == '__main__':
+    save = Where_save().find()
+    print(save)
+    salve = Write_txt().write("boa noite")

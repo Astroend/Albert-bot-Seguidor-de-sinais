@@ -7,11 +7,14 @@ from classes.layouts import Layouts
 from classes.readTXT import Read
 from classes.api_main import Api
 
+import os
+
 
 class Main():
 
     def __init__(self):
-
+        print("\n" * os.get_terminal_size().lines)
+        print("****START****\n\n")
         operate = False
         api = Api()
         window_astroend, window_file, window_login, pop_up, window_option, window_trading, window_terminate = Layouts.window_astroend(
@@ -19,32 +22,43 @@ class Main():
 
         status, message = Where_save().find()
 
+
         if status:
             file_historic = message
+            print(" -- CAMINHO SALVO: '" +file_historic+"'\n")
+        else:
+            print(" -- CAMINHO NÃO ENCONTRADO\n")
 
         while True:
 
             window, event, values = sg.read_all_windows(timeout=25)
 
             if window == window_astroend and event == sg.WIN_CLOSED:
+                print("\n****EXIT****\n")
                 break
 
             if window == window_astroend and event == 'TERMOS':
                 link = Process(target=Action_functions.open_link)
                 link.start()
+                print(" -- TERMOS \n")
 
             if window == window_astroend and event == 'ACEITO OS TERMOS':
+                print(" -- TERMOS ACEITOS\n")
                 window_astroend.close()
 
                 if status:
+                    print(" -- WINDOW LOGIN\n")
                     window_login = Layouts.window_login()
                 else:
+                    print(" -- WINDOW FILE\n")
                     window_file = Layouts.window_file()
 
             if window == window_file and event == sg.WIN_CLOSED:
+                print("\n****EXIT****\n")
                 break
 
             if window == window_file and event == 'Enviar':
+                print(" -- CAMINHO ENVIADO: '" +values['file']+ "'\n")
                 window_file['file_historic'].update(values['file'])
 
             if window == window_file and event == 'Escolher':
@@ -52,36 +66,46 @@ class Main():
 
                 status, message = Where_save().find()
                 if status:
+                    print(" -- CAMINHO SALVO\n")
                     file_historic = message
 
                 window_file.close()
+                print(" -- WINDOW LOGIN\n")
                 window_login = Layouts.window_login()
 
             if window == window_login and event == sg.WIN_CLOSED:
+                print("\n****EXIT****\n")
                 break
 
             if window == window_login and event == 'Entrar':
 
+                password = ('*' * len(values['password']))
+                
+                print(" -- LOGIN: {'" + values['login'] + "', '" + password +"'}\n")
                 window_login.close()
 
                 loading = Process(target=Action_functions.gif)
                 loading.start()
 
                 if(api.connect(values['login'], values['password'])):
+                    print(" -- CONECTADO \n")
                     api.update_balance()
                     loading.terminate()
                     window_option = Layouts.window_option()
                 else:
                     loading.terminate()
+                    print(" -- ERRO AO CONECTAR\n")
                     pop_up = Layouts.pop_up()
                     window_login = Layouts.window_login()
 
             if window == window_option and event == sg.WIN_CLOSED:
+                print("\n****EXIT****\n")
                 break
 
             if window == window_option and event == 'Enviar':
                 window_option['listbox'].update(Read(values['file']).to_list())
                 file = Read(values['file']).convert()
+                print(" -- SINAIS ENVIADOS\n")
                 api.sinais(file)
 
             if window == window_option and event == 'Operar':
@@ -96,6 +120,10 @@ class Main():
                 api.martingale(int(values['martingale']))
                 api.multiplicador(
                     float((str(values['multiplier'])).replace(',', '.')))
+
+                print(" -- COMEÇANDO: {'"+str(api.get_type)+"', '"+str(api.get_balance)+"', '"+str(api.get_martingale)+"', '"
+                    +str(api.get_stop_win_complete)+"', '"+str(api.get_stop_loss_complete)+"', '"
+                    +str(api.get_option)+"', '"+str(api.get_multiplicador)+"', '"+str(api.get_value)+"'}\n")
 
                 trading_ = Thread(target=api.operate)
 
@@ -112,23 +140,25 @@ class Main():
                 break
 
             if operate:
+                sinal = (f"{Actual_signal(file).get_next()}")
                 window_trading['-balance-'].update(f"Banca: {api.get_balance}")
                 window_trading['-status-'].update('Meta batida' if api.get_balance >= api.get_stop_win_complete else 'Stop atingido' if api.get_balance <=
-                                                  api.get_stop_loss_complete else f'Trabalhando ...' if api.get_balance > 0 else 'Sem fundos.')
-                window_trading['-signal-'].update(
-                    f"{Actual_signal(file).get_next()}")
+                                                  api.get_stop_loss_complete else f'Trabalhando ...' if api.get_balance > 0 else 'Sem fundos')
+                window_trading['-signal-'].update(sinal if (sinal != "None") else "Sem Sinais")
 
             if window == window_trading and event == 'Finalizar':
                 api.set_status()
                 operate = False
 
                 window_trading.close()
-                window_terminate = Layouts.window_finalize(api.get_balance)
+                window_terminate = Layouts.window_finalize(api.get_balance, file_historic)
 
             if window == window_terminate and event == sg.WIN_CLOSED:
+                print("\n****EXIT****\n")
                 break
 
             if window == window_terminate and event == 'Fechar':
+                print("\n****EXIT****\n")
                 break
 
 
