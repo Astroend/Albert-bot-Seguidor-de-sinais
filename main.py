@@ -40,7 +40,7 @@ class Main():
             if window == window_astroend and event == 'TERMOS':
                 link = Process(target=Action_functions.open_link)
                 link.start()
-                print(" -- TERMOS \n")
+                logging.info(" -- TERMOS \n")
 
             if window == window_astroend and event == 'ACEITO OS TERMOS':
                 print(" -- TERMOS ACEITOS\n")
