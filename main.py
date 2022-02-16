@@ -81,7 +81,7 @@ class Main():
 
                 password = ('*' * len(values['password']))
                 
-                print(" -- LOGIN: {'" + values['login'] + "', '" + password +"'}\n")
+                logging.info(" -- LOGIN: {'" + values['login'] + "', '" + password +"'}\n")
                 window_login.close()
 
                 loading = Process(target=Action_functions.gif)
