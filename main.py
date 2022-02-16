@@ -50,7 +50,7 @@ class Main():
                     logging.info(" -- WINDOW LOGIN\n")
                     window_login = Layouts.window_login()
                 else:
-                    print(" -- WINDOW FILE\n")
+                    logging.info(" -- WINDOW FILE\n")
                     window_file = Layouts.window_file()
 
             if window == window_file and event == sg.WIN_CLOSED:
