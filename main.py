@@ -158,7 +158,7 @@ class Main():
                 break
 
             if window == window_terminate and event == 'Fechar':
-                print("\n****EXIT****\n")
+                logging.info("\n****EXIT****\n")
                 break
 
 
