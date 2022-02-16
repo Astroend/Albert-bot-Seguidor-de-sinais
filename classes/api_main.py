@@ -5,7 +5,7 @@ from classes.readTXT import Read
 from classes.action_functions import Write_txt
 
 from datetime import datetime
-
+import logging
 class Api():
 
     # Variável de controle de uso do bot.
