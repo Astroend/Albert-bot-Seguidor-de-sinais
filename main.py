@@ -87,7 +87,7 @@ class Main():
                 loading.start()
 
                 if(api.connect(values['login'], values['password'])):
-                    print(" -- CONECTADO \n")
+                    logging.info(" -- CONECTADO \n")
                     api.update_balance()
                     loading.terminate()
                     window_option = Layouts.window_option()
