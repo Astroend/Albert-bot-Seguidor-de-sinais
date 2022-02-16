@@ -9,7 +9,6 @@ from classes.api_main import Api
 
 import os
 
-
 class Main():
 
     def __init__(self):
