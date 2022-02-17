@@ -1,4 +1,3 @@
-
 from classes.layouts import Layouts
 import gif_image.gif
 
