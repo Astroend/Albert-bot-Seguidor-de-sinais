@@ -120,4 +120,3 @@ class Write_txt():
             with open(f'''{files}/{datetime.now().strftime('%d-%m-%Y')}.txt''', 'a') as file:
                 '''Abre o arquivo em modo de adicionar text'''
                 file.write(txt) # Escreve no arquivo txt.
-    
