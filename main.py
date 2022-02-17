@@ -1,20 +1,18 @@
 from PySimpleGUI import PySimpleGUI as sg
 from multiprocessing import Process, Manager, freeze_support
 from threading import Thread
+import logging
+import os
 
 from classes.action_functions import Action_functions, Actual_signal, Where_save
 from classes.layouts import Layouts
 from classes.readTXT import Read
 from classes.api_main import Api
 
-import logging
-
-import os
-
 class Main():
 
     def __init__(self):
-        logging.info("\n" * os.get_terminal_size().lines)
+        os.system("cls")
         logging.info("****START****\n\n")
         operate = False
         api = Api()
@@ -166,4 +164,5 @@ class Main():
 
 if __name__ == '__main__':
     freeze_support()
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s',filename='app.log',filemode='w')
     Main()
