@@ -1,10 +1,11 @@
 # Classe de acesso direto ás informações de usuário.
 from iqoptionapi.stable_api import IQ_Option
 
-from classes.readTXT import Read, Write_txt
+from classes.readTXT import Read
+from classes.action_functions import Write_txt
 
 from datetime import datetime
-
+import logging
 class Api():
 
     # Variável de controle de uso do bot.
@@ -167,16 +168,18 @@ class Api():
     def its_time(self, hour):
         now = datetime.now()
         date = datetime(int(now.strftime("%Y")), int(now.strftime("%m")), int(now.strftime("%d")), int(hour[0]), int(hour[1]), 00)
-        print("Aguardando o horário de compra")
         while True:
             if not self.stop(): break
             #print(date ,datetime.timestamp(date), self.API.get_server_timestamp())
-            timestamp_ = self.API.get_server_timestamp() 
+            timestamp_ = self.API.get_server_timestamp()
 
-            if (datetime.timestamp(date)-2) <= timestamp_ and datetime.timestamp(date)+1 >= timestamp:
+            logging.info(f"  ## [{datetime.now().strftime('%H:%M:%S')}] :: Aguardando... ("+str(date)+")", end='\r')
+
+            if (datetime.timestamp(date)-2) <= timestamp_ and datetime.timestamp(date)+1 >= timestamp_:
+                logging.info(f"\r  ## [{datetime.now().strftime('%H:%M:%S')}] :: Comprando...                          ")
                 return True
             if (datetime.timestamp(date)+10) < timestamp_:
-                print("Horário de compra passou.")
+                logging.info(f"  ## [{datetime.now().strftime('%H:%M:%S')}] :: Aguardando... ("+str(date)+")", end='\r')
                 return False
 
     # Parâmetros de parada do automatizador.
@@ -184,12 +187,14 @@ class Api():
         if self.status == True:
             return False
         if self.API.get_balance() >= (self.banca + self.stop_win):
-            print("Stop win batido.")
-            input("Pressione enter para sair.")
+            logging.info("  ## Stop win batido.\n")
+            txt = (f'''   ##### STOP WIN #####''')
+            Write_txt().write(txt)
             return False
         if self.API.get_balance() <= (self.banca - self.stop_loss):
-            print("Stop loss batido.")
-            input("Pressione enter para sair.")
+            logging.info(" ## Stop loss batido.\n")
+            txt = (f'''   ##### STOP LOSS #####''')
+            Write_txt().write(txt)
             return False
         if self.API.get_balance() < (self.banca + self.stop_win) and self.API.get_balance() > (self.banca - self.stop_loss): return True
   
@@ -199,49 +204,62 @@ class Api():
         for trie in range(self.martingale + 1):
             check,id=self.API.buy(value, active, action, duration)
             if check:
-                if value > self.__value: print(f"{trie}ª Martingale")
-                print(f"Ordem de {action} em {active} de {value} aberta.")
+                if trie != 0: print(f"  ## {trie}ª Martingale")
+                logging.info(f"  ## Ordem de {action} em {active} de {value} aberta.")
             else:
-                print(f"Oops, tive um problema em abrir a ordem {active} as {time}")
+                logging.info(f"  ## Oops, tive um problema em abrir a ordem {active} as {time}\n")
+                txt = (f''' ## Problemas em {active} as {time}''')
+                Write_txt().write(txt)
                 return 0
             result = self.API.check_win_v3(id)
-            if result < 0: 
-                #if trie == self.martingale-1:
-                    # self.txt.write(f'''R$ {result} - {active} - {time} - {action}''')
-                value*= self.multiplicador
-            print(f"Resultado da ordem {result}")
-            if result > 0: 
-                # self.txt.write(f'''R$ +{result} - {active} - {time} - {action}''')
-                return result
+    
+            value*= self.multiplicador
+            saldo = round(float(result),2)
+            if (trie == 0):
+                txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldo}''')
+            else:
+                txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldo} / Martingale {trie}''')
+            Write_txt().write(txt)
+            logging.info(f"  ## Resultado da ordem {result}")
+            logging.info("  ## Operação Salva \n")
 
     # Abre as ordens em opções digital.
     def buy_digital(self, active, action, duration, time):
         value = self.value
-        for trie in range(self.martingale +1):
+        for trie in range(self.martingale + 1):
             _, id = self.API.buy_digital_spot(active, value, action.lower(), duration)
             if id !="error":
-                if value > self.value : print(f"{trie}ª Martingale")
-                print(f"Ordem de {action} em {active} de {value} aberta.")
+                if (trie != 0) : print(f"  ## {trie}ª Martingale")
+                logging.info(f"  ## Ordem de {action} em {active} de {value} aberta.")
                 while True:
                     check,win=self.API.check_win_digital_v2(id)
                     if check==True:
                         break
-                if win<0:
-                    print(f"Resultado da ordem -R${win}")
-                    value *= self.multiplicador
-                    #if trie == self.martingale-1:
-                        # self.txt.write(f'''R$ -{win} - {active} - {time} - {action}''')
-                if win > 0:
-                    print(f"Resultado da ordem +R${win}")
-
-                    # self.txt.write(f'''R$ +{win} - {active} - {time} - {action}''')
-                    return win
+  
+                logging.info(f"  ## Resultado da ordem -R${win}")
+                value *= self.multiplicador
+                if trie == self.martingale:
+                    #txt = (f'''R$ -{win} - {active} - {time} - {action}''')
+                    saldo = round(float(win),2)
+                    if (trie == 0):
+                        txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldo}''')
+                    else:
+                        txt = (f'''{duration} / {active} / {action} / {time} / {self.get_type} / {self.get_option} / $ {saldo} / Martingale {trie}''')
+                    Write_txt().write(txt)
+                    logging.info("  ## Operação Salva \n")
+                 
             else:
-                print(f"Oops, tive um problema em abrir a ordem {active} as {time}")
+                logging.info(f"  ## Oops, tive um problema em abrir a ordem {active} as {time}\n")
+                txt = (f''' ## Problemas em {active} as {time}''')
+                Write_txt().write(txt)
+                logging.info("  ## Operação Salva \n")
 
     # Inicia as operações.
     def operate(self):
         self.status = False
+        logging.info("  ## TRABALHANDO...\n")
+        txt = (f''' --- COMECO --- ''')
+        Write_txt().write(txt)
         for item in self.sinais:
             if self.stop():
                 entrar = self.its_time(item['Hour'])
@@ -252,4 +270,6 @@ class Api():
                         self.buy_digital(item["Active"], item["Action"], item["Duration"], item["Hour"])
                 else: continue
 
-        print("acabou")
+        logging.info("\n\n  ## ...FINALIZADO\n")
+        txt = (f''' --- FIM --- ''')
+        Write_txt().write(txt)
