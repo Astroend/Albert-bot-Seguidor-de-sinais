@@ -76,7 +76,7 @@ class Layouts():
         layout_column = [  
             [sg.Text(('Conta: Real' if type == 'REAL' else 'Conta: Treino'), font='ANY 15', justification='right', size = (40,1))],
             [sg.Text('')],
-            [sg.Text('Banca: ' + str(balance), font='ANY 15', text_color='#64929E', justification='right', key = '-balance-')],
+            [sg.Text('Banca: ', font='ANY 15', text_color='#64929E', justification='right', key = '-balance-')],
             [sg.Text('Martingale: '+ str(martingale), font='ANY 15', justification='left')],
             [sg.Text('Stop Win: ' + str(stop_win), font='ANY 15', text_color='#00994D', justification='left', key = '-stop_win-')],
             [sg.Text('Stop Loss: ' + str(stop_loss), font='ANY 15', text_color='#D93F07', justification='left',key = '-stop_loss-')],

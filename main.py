@@ -85,8 +85,7 @@ class Main():
                 loading = Process(target=Action_functions.gif)
                 loading.start()
 
-                #if(api.connect(values['login'], values['password'])):
-                if(api.connect('iagofbraga@gmail.com', 'f84675632')):
+                if(api.connect(values['login'], values['password'])):
                     logging.info(" -- CONECTADO \n")
                     api.update_balance()
                     loading.terminate()
@@ -124,12 +123,13 @@ class Main():
                     +str(api.get_stop_win_complete)+"', '"+str(api.get_stop_loss_complete)+"', '"
                     +str(api.get_option)+"', '"+str(api.get_multiplicador)+"', '"+str(api.get_value)+"'}\n")
 
+                operate = True
+
                 trading_ = Thread(target=api.operate)
 
                 trading_.start()
 
                 window_option.close()
-                operate = True
                 window_trading = Layouts.window_trading(
                     api.get_type, api.get_balance, api.get_martingale, api.get_stop_win_complete, api.get_stop_loss_complete)
 
@@ -139,8 +139,9 @@ class Main():
                 break
 
             if operate:
+                api.update_balance()
                 sinal = (f"{Actual_signal(file).get_next()}")
-                window_trading['-balance-'].update(f"Banca: {api.get_balance}")
+                window_trading['-balance-'].update("Banca: " + str(api.get_balance))
                 window_trading['-status-'].update('Meta batida' if api.get_balance >= api.get_stop_win_complete else 'Stop atingido' if api.get_balance <=
                                                   api.get_stop_loss_complete else f'Trabalhando ...' if api.get_balance > 0 else 'Sem fundos')
                 window_trading['-signal-'].update(sinal if (sinal != "None") else "Sem Sinais")
