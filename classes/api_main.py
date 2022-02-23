@@ -117,10 +117,6 @@ class Api():
     def get_password(self):
         return self.password
 
-    def file(self, file):
-        self.txt = Write_txt(file)
-        self.txt.directory()
-
     def connect(self, email, senha):
         self.__email(email)
         self.__password(senha)
@@ -173,13 +169,13 @@ class Api():
             #print(date ,datetime.timestamp(date), self.API.get_server_timestamp())
             timestamp_ = self.API.get_server_timestamp()
 
-            logging.info(f"  ## [{datetime.now().strftime('%H:%M:%S')}] :: Aguardando... ("+str(date)+")", end='\r')
+            logging.info(f"  ## [{datetime.now().strftime('%H:%M:%S')}] :: Aguardando... ("+str(date)+")")
 
             if (datetime.timestamp(date)-2) <= timestamp_ and datetime.timestamp(date)+1 >= timestamp_:
                 logging.info(f"\r  ## [{datetime.now().strftime('%H:%M:%S')}] :: Comprando...                          ")
                 return True
             if (datetime.timestamp(date)+10) < timestamp_:
-                logging.info(f"  ## [{datetime.now().strftime('%H:%M:%S')}] :: Aguardando... ("+str(date)+")", end='\r')
+                logging.info(f"  ## [{datetime.now().strftime('%H:%M:%S')}] :: Aguardando... ("+str(date)+")")
                 return False
 
     # Parâmetros de parada do automatizador.

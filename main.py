@@ -21,7 +21,6 @@ class Main():
 
         status, message = Where_save().find()
 
-
         if status:
             file_historic = message
             logging.info(" -- CAMINHO SALVO: '" +file_historic+"'\n")
@@ -86,7 +85,8 @@ class Main():
                 loading = Process(target=Action_functions.gif)
                 loading.start()
 
-                if(api.connect(values['login'], values['password'])):
+                #if(api.connect(values['login'], values['password'])):
+                if(api.connect('iagofbraga@gmail.com', 'f84675632')):
                     logging.info(" -- CONECTADO \n")
                     api.update_balance()
                     loading.terminate()
@@ -119,7 +119,6 @@ class Main():
                 api.martingale(int(values['martingale']))
                 api.multiplicador(
                     float((str(values['multiplier'])).replace(',', '.')))
-                api.file(file)
 
                 logging.info(" -- COMEÇANDO: {'"+str(api.get_type)+"', '"+str(api.get_balance)+"', '"+str(api.get_martingale)+"', '"
                     +str(api.get_stop_win_complete)+"', '"+str(api.get_stop_loss_complete)+"', '"
